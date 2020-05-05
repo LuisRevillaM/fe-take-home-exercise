@@ -1,4 +1,4 @@
-const heading = /^[#]{1,6}\s.*/gi;
+const heading = /^[#]{1,6}\s.*/gm;
 
 const paragraph = /^(?!([#]{1,6}\s.*)|((-\s.*\n?)+)|((1\.\s.*\n?)+)|(^>\s.+)).+/gm;
 
@@ -12,10 +12,10 @@ const italic = /\*(.*?)\*/gi;
 
 const blockQuote = /^>\s.+/gm;
 
-const link = /(?:__|[*#])|\[(.*?)\]\((.*?)\)/g;
+const link = /([])|\[(.*?)\]\((.*?)\)/gm;
 
 const replaceLinks = (markdownLink: string, ...capturedGroups: any) => {
-    const [label, url] = capturedGroups;
+    const [,label, url] = capturedGroups;
     return `<a href="${url}">${label}</a>`;
 };
 
@@ -51,7 +51,7 @@ type BoldItalicDivider = '*' | '**';
 type EmphasisType = 'strong' | 'em';
 
 const replaceEmphasis = (markdown: string, type: EmphasisType, divider: BoldItalicDivider) => {
-    const [a, content, b] = markdown.split(divider);
+    const [, content, ] = markdown.split(divider);
 
     return `<${type}>${content}</${type}>`;
 };
@@ -61,7 +61,7 @@ const replaceParagraphs = (match: string) => {
 };
 
 const replaceBlockQuotes = (match: string) => {
-    const [blank, quote] = match.split('> ');
+    const [, quote] = match.split('> ');
     return `<blockquote><p>${quote}</p></blockquote>`;
 };
 
